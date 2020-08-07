@@ -7,20 +7,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     todoesFromApi: null,
+    savingInputTodoWork: false,
     registeredData: null,
+    innerBrowserHeight: Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0),
     token: localStorage.getItem('token') || null,
-    user: {
-      isAuthenticate: false
-    },
-
-
   },
   getters: {
     todoesFromApi: state => {
-      if (state.todoesFromApi !== null) return state.todoesFromApi.reverse();
+      if (state.todoesFromApi !== null) return state.todoesFromApi;
       else return null;
     },
-    isAuthenticate: state => state.user.isAuthenticate
+
+    savingInputTodoWork: state => state.savingInputTodoWork,
+
+    innerBrowserHeight: state => state.innerBrowserHeight,
   },
   mutations: {
     retrieveToken(state, {email, password}) {
@@ -49,9 +49,13 @@ export default new Vuex.Store({
 
 
     getTodoesFromApi(state, todoesFromApi) {
-      state.todoesFromApi = todoesFromApi
+      state.todoesFromApi = todoesFromApi.reverse()
     },
 
+
+    savingInputTodoWork(state) {
+      state.savingInputTodoWork = true;
+    },
 
     // handleAuthentication(state, processedUserData) {
     //   (processedUserData.statusCode === 200 && processedUserData.statusText === 'OK' && processedUserData.userData === 2) ? state.user.isAuthenticate = true : state.user.isAuthenticate = false;
@@ -72,7 +76,7 @@ export default new Vuex.Store({
     },
 
 
-    async saveTodoWork({commit}, name) {
+    async saveTodoWork({commit, state}, name) {
       await axios({
         method: 'post',
         url: 'api/works',
@@ -81,6 +85,7 @@ export default new Vuex.Store({
           status: 1
         },
       }).then(function (response) {
+        state.savingInputTodoWork = false;
         return response;
       }).catch(function (err) {
           //

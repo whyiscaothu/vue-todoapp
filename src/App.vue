@@ -1,21 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-        <router-link :to="{name: 'Home'}">Home</router-link>  |
-        <router-link :to="{name: 'User'}">User</router-link>  |
-        <router-link :to="{name: 'About'}">About</router-link>  |
-        <router-link :to="{name: 'Login'}">Login</router-link>  |
-        <router-link :to="{name: 'Register'}">Register</router-link>
-    </div>
-
-    <router-view :key="$route.fullPath"/>
+    <v-app >
+        <v-container
+                fluid
+                class="py-0"
+        >
+            <v-row>
+                <v-nav id="nav" class="col-sm-1 col-md-2 col-lg-3"></v-nav>
+                <div class="col-sm-11 col-md-10 col-lg-9 pa-0">
+                    <c-vue-scroll>
+                        <router-view :key="$route.fullPath"/>
+                    </c-vue-scroll>
+                </div>
+            </v-row>
+        </v-container>
+    </v-app>
   </div>
 </template>
 
 <script>
-
+    import VNav from "./components/VNav";
+    import CVueScroll from "./components/CVueScroll";
   export default {
-
+    components: {
+        VNav,
+        CVueScroll
+    },
     created() {
       this.$store.dispatch('getTodoesFromApi');
 
@@ -24,24 +34,28 @@
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+    #app {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
     }
-  }
-}
+
+    #nav {
+
+      a {
+        font-weight: bold;
+        color: whitesmoke;
+
+        &.router-link-exact-active {
+          color: #42b983;
+          border: solid #42b983 1px;
+        }
+      }
+    }
+
+    .relative {
+        position: relative;
+    }
 </style>
