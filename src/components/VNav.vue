@@ -5,7 +5,6 @@
             :height="innerBrowserHeight"
             :expand-on-hover="expandOnHover"
             :mini-variant="miniVariant"
-            :src="bg"
             permanent
             dark
     >
@@ -52,24 +51,22 @@
             </v-list-item>
         </v-list>
         <template v-slot:append>
-            <v-list-item link>
-                <v-list-item-icon>
-                    <v-icon>ok</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                    <v-btn block>Logout</v-btn>
-                </v-list-item-content>
-            </v-list-item>
+            <c-authentication-button @click.native="logout" title="logout" mdi-icon="mdi-logout" />
+            <c-authentication-button title="login" mdi-icon="mdi-login" />
         </template>
     </v-navigation-drawer>
 </template>
 
 <script>
     import {mapGetters} from 'vuex'
+    import CAuthenticationButton from "./CAuthenticationButton";
 
     export default {
         name: "VNav",
+        components: {
+            CAuthenticationButton
+        },
+
         data () {
             return {
                 drawer: true,
@@ -110,11 +107,12 @@
                 background: false,
             }
         },
+
         computed: {
 
 
             ...mapGetters([
-                'innerBrowserHeight'
+                'innerBrowserHeight',
             ]),
 
 
@@ -123,6 +121,12 @@
             },
 
         },
+
+        methods: {
+            logout () {
+                this.$store.dispatch('logout');
+            }
+        }
     }
 </script>
 

@@ -6,8 +6,8 @@
                 class="py-0"
         >
             <v-row>
-                <v-nav id="nav" class="col-sm-1 col-md-2 col-lg-3"></v-nav>
-                <div class="col-sm-11 col-md-10 col-lg-9 pa-0">
+                <v-nav id="nav" class="col-sm-1 col-lg-2"></v-nav>
+                <div class="col-sm-11 col-lg-10 pa-0">
                     <c-vue-scroll>
                         <router-view :key="$route.fullPath"/>
                     </c-vue-scroll>

@@ -59,7 +59,20 @@ export default new Vuex.Store({
 
     // handleAuthentication(state, processedUserData) {
     //   (processedUserData.statusCode === 200 && processedUserData.statusText === 'OK' && processedUserData.userData === 2) ? state.user.isAuthenticate = true : state.user.isAuthenticate = false;
-    // }
+    // },
+
+
+    logout() {
+      axios.get('api/logout')
+          .then(function (response) {
+            console.log(response);
+            localStorage.removeItem('token');
+            location.reload();
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+    }
 
 
   },
@@ -107,18 +120,21 @@ export default new Vuex.Store({
 
 
     register({commit}, {name, email, password, c_password}) {
-      axios({
-        method: 'post',
-        url: 'api/register',
-        data: {
+      axios.post('api/register',{
           name,
           email,
           password,
           c_password
-        }
       }).then(function (response) {
         commit('register', response)
+      }).catch(function (err) {
+        console.log(err)
       })
+    },
+
+
+    logout({commit}) {
+      commit('logout')
     },
 
 
@@ -128,28 +144,6 @@ export default new Vuex.Store({
         password
       })
     },
-
-
-    // async retrieveUserInfo({commit}) {
-    //
-    //   let user = await axios({
-    //     method: 'get',
-    //     url: 'api/user'
-    //   }).then(function (response) {
-    //     return response;
-    //   });
-    //
-    //   let processedUserData = {
-    //     statusCode: user.status, //statusCode = 200
-    //     statusText: user.statusText, //statusText = 'OK'
-    //     userData: [
-    //       user.data.name,//name: "user"
-    //       user.data.email,//email: "user@mail.com"
-    //     ].length
-    //   }
-    //
-    //   commit('handleAuthentication', processedUserData)
-    // },
 
 
   },

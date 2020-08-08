@@ -69,9 +69,9 @@ router.beforeEach(async (to, from, next)=>{
     responseStatus = 401;
   })
   if ( to.matched.some( record => record.meta.requiresAuth ) && responseStatus !== 200 ){
-    next({name: 'Login'})
+    next({name: 'Login'});
   }else if ( to.matched.some( record => record.meta.requiresVisitor ) && responseStatus === 200 ) {
-    next({name: 'Home'})
+    next({name: 'Home'});
   }else {
     next()
   }
