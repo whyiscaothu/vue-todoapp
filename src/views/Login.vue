@@ -25,7 +25,6 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form @submit.prevent="login">
-                                    {{loginStatus}}
                                     <v-text-field
                                             label="Email"
                                             name="email"
@@ -87,7 +86,6 @@
             return {
                 email: null,
                 password: null,
-                countDown: 5
             }
         },
 
