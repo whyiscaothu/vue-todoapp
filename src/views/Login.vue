@@ -25,6 +25,7 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form @submit.prevent="login">
+                                    {{loginStatus}}
                                     <v-text-field
                                             label="Email"
                                             name="email"
@@ -45,6 +46,26 @@
                                         <v-spacer></v-spacer>
                                         <v-btn type="submit" color="primary">Login</v-btn>
                                     </v-card-actions>
+
+
+                                    <c-authenticate-dialog>
+                                        <v-card-text v-if="loginStatus && loginMessage === null">
+                                            Please stand by
+                                            <v-progress-linear
+                                                    indeterminate
+                                                    color="white"
+                                                    class="mb-0"
+                                            ></v-progress-linear>
+                                        </v-card-text>
+
+                                        <v-card-text v-else-if="loginStatus && loginMessage">
+                                            <div class="pt-6">
+                                                {{loginMessage}}
+                                            </div>
+                                        </v-card-text>
+                                    </c-authenticate-dialog>
+
+
                                 </v-form>
                             </v-card-text>
                         </v-card>
@@ -56,22 +77,41 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+    import {LOGIN} from '@/store/authenticate-module/mutation-types'
+    import CAuthenticateDialog from "@/components/CAuthenticateDialog";
     export default {
         name: "Login",
+        components: {CAuthenticateDialog},
         data() {
             return {
                 email: null,
-                password: null
+                password: null,
+                countDown: 5
             }
         },
+
+
+        computed: {
+            ...mapGetters({
+                loginStatus: 'authenticate/loginStatus',
+                loginMessage: 'authenticate/loginMessage'
+            })
+        },
+
         methods: {
             login() {
-                console.log('login...')
-                this.$store.dispatch('retrieveToken', {
+                let loginMessage = null;
+                let loginStatus = true;
+                this.$store.commit(`authenticate/${LOGIN}`, {
+                    loginMessage,
+                    loginStatus
+                });
+
+                this.$store.dispatch('authenticate/login', {
                     email: this.email,
                     password: this.password
                 })
-
             }
         }
     }

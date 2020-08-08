@@ -1,6 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import router from '../router'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import router from '../router';
+import authenticate from './authenticate-module'
 
 Vue.use(Vuex)
 
@@ -23,23 +24,7 @@ export default new Vuex.Store({
     innerBrowserHeight: state => state.innerBrowserHeight,
   },
   mutations: {
-    retrieveToken(state, {email, password}) {
-      axios({
-        method: 'post',
-        url: 'api/login',
-        data: {
-          email,
-          password
-        }
-      }).then(function ({data}) {
-        const token = data.data.token;
-        localStorage.setItem('token', token)
-        console.log('Done sign in.')
-        location.reload();
-      }).catch(function (err) {
 
-      })
-    },
 
 
     register(state, registeredResponse) {
@@ -138,16 +123,8 @@ export default new Vuex.Store({
     },
 
 
-    retrieveToken({commit}, {email, password}) {
-      commit('retrieveToken', {
-        email,
-        password
-      })
-    },
-
-
   },
   modules: {
-    //
+    authenticate
   }
 })
