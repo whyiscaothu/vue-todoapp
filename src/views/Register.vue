@@ -57,7 +57,7 @@
                                             name="c_password"
                                             prepend-icon="mdi-lock-check"
                                             type="password"
-                                            v-model="confirmPassword"
+                                            v-model="c_password"
                                     ></v-text-field>
 
                                     <v-card-actions>
@@ -82,7 +82,7 @@
                 name: null,
                 email: null,
                 password: null,
-                confirmPassword: null
+                c_password: null
             }
         },
         methods: {
