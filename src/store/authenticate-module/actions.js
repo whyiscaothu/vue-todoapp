@@ -85,3 +85,21 @@ export function register({dispatch, commit}, {name, email, password, c_password}
         //
     })
 }
+
+
+export function logout({commit}) {
+    axios.get('api/logout')
+        .then(function ({data}) {
+            const loginMessage = data.message;
+            commit(LOGIN, {
+                loginMessage,
+                loginStatus: true
+            });
+            // code open modal when login success ò fail here.
+            localStorage.removeItem('token');
+            countDownTimer(3, commit, loginMessage, false)
+        })
+        .catch(function (err) {
+            //
+        });
+}

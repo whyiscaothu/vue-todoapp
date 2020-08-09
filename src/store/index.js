@@ -37,17 +37,6 @@ export default new Vuex.Store({
     //   (processedUserData.statusCode === 200 && processedUserData.statusText === 'OK' && processedUserData.userData === 2) ? state.user.isAuthenticate = true : state.user.isAuthenticate = false;
     // },
 
-    logout() {
-      axios.get('api/logout')
-          .then(function (response) {
-            console.log(response);
-            localStorage.removeItem('token');
-            location.reload();
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-    }
 
   },
   actions: {
@@ -89,11 +78,6 @@ export default new Vuex.Store({
     todoesFromApi({commit}, {data}) {
       commit('todoesFromApi', {data})
     },
-
-    logout({commit}) {
-      commit('logout')
-    },
-
 
   },
   modules: {

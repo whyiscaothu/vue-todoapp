@@ -54,17 +54,36 @@
             <c-authentication-button @click.native="logout" title="logout" mdi-icon="mdi-logout" />
             <c-authentication-button title="login" mdi-icon="mdi-login" />
         </template>
+        <c-authenticate-dialog>
+            <v-card-text v-if="loginStatus && loginMessage === null">
+                Please stand by
+                <v-progress-linear
+                        indeterminate
+                        color="white"
+                        class="mb-0"
+                ></v-progress-linear>
+            </v-card-text>
+
+            <v-card-text v-else-if="loginStatus && loginMessage">
+                <div class="pt-6">
+                    {{loginMessage}}
+                </div>
+            </v-card-text>
+        </c-authenticate-dialog>
     </v-navigation-drawer>
 </template>
 
 <script>
     import {mapGetters} from 'vuex'
+    import {LOGIN} from "@/store/authenticate-module/mutation-types";
     import CAuthenticationButton from "./CAuthenticationButton";
+    import CAuthenticateDialog from "./CAuthenticateDialog";
 
     export default {
         name: "VNav",
         components: {
-            CAuthenticationButton
+            CAuthenticationButton,
+            CAuthenticateDialog
         },
 
         data () {
@@ -111,9 +130,11 @@
         computed: {
 
 
-            ...mapGetters([
-                'innerBrowserHeight',
-            ]),
+            ...mapGetters({
+                innerBrowserHeight: 'innerBrowserHeight',
+                loginStatus: 'authenticate/loginStatus',
+                loginMessage: 'authenticate/loginMessage'
+            }),
 
 
             bg () {
@@ -124,7 +145,13 @@
 
         methods: {
             logout () {
-                this.$store.dispatch('logout');
+                let loginMessage = null;
+                let loginStatus = true;
+                this.$store.commit(`authenticate/${LOGIN}`, {
+                    loginMessage,
+                    loginStatus
+                });
+                this.$store.dispatch('authenticate/logout');
             }
         }
     }
