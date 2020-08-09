@@ -58,7 +58,6 @@ const router = new VueRouter({
 
 
 router.beforeEach(async (to, from, next)=>{
-  document.documentElement.style.overflow = 'hidden';
   let responseStatus = null;
   await axios({
     method: 'get',

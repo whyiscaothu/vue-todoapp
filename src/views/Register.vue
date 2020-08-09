@@ -64,6 +64,24 @@
                                         <v-spacer></v-spacer>
                                         <v-btn type="submit" class="px-16" color="primary">Sign In</v-btn>
                                     </v-card-actions>
+
+                                    <c-authenticate-dialog>
+                                        <v-card-text v-if="loginStatus && loginMessage === null">
+                                            Please stand by
+                                            <v-progress-linear
+                                                    indeterminate
+                                                    color="white"
+                                                    class="mb-0"
+                                            ></v-progress-linear>
+                                        </v-card-text>
+
+                                        <v-card-text v-else-if="loginStatus && loginMessage">
+                                            <div class="pt-6">
+                                                {{loginMessage}}
+                                            </div>
+                                        </v-card-text>
+                                    </c-authenticate-dialog>
+
                                 </v-form>
                             </v-card-text>
                         </v-card>
@@ -75,8 +93,15 @@
 </template>
 
 <script>
+    import CAuthenticateDialog from "@/components/CAuthenticateDialog";
+    import {mapGetters} from "vuex";
+    import {LOGIN} from '@/store/authenticate-module/mutation-types'
+
     export default {
         name: "Register",
+        components: {
+            CAuthenticateDialog
+        },
         data() {
             return {
                 name: null,
@@ -85,9 +110,25 @@
                 c_password: null
             }
         },
+
+
+        computed: {
+            ...mapGetters({
+                loginStatus: 'authenticate/loginStatus',
+                loginMessage: 'authenticate/loginMessage'
+            })
+        },
+
+
         methods: {
             register() {
-                this.$store.dispatch('register', {
+                let loginMessage = null;
+                let loginStatus = true;
+                this.$store.commit(`authenticate/${LOGIN}`, {
+                    loginMessage,
+                    loginStatus
+                });
+                this.$store.dispatch('authenticate/register', {
                     name: this.name,
                     email: this.email,
                     password: this.password,

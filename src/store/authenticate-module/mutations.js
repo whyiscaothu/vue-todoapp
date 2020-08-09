@@ -1,6 +1,7 @@
 import {
     LOGIN,
 } from './mutation-types';
+import router from "@/router";
 
 export default {
     // /**

@@ -25,18 +25,9 @@ export default new Vuex.Store({
   },
   mutations: {
 
-
-
-    register(state, registeredResponse) {
-      state.registeredData = registeredResponse;
-      router.push({name: 'Login'})
-    },
-
-
     getTodoesFromApi(state, todoesFromApi) {
       state.todoesFromApi = todoesFromApi.reverse()
     },
-
 
     savingInputTodoWork(state) {
       state.savingInputTodoWork = true;
@@ -45,7 +36,6 @@ export default new Vuex.Store({
     // handleAuthentication(state, processedUserData) {
     //   (processedUserData.statusCode === 200 && processedUserData.statusText === 'OK' && processedUserData.userData === 2) ? state.user.isAuthenticate = true : state.user.isAuthenticate = false;
     // },
-
 
     logout() {
       axios.get('api/logout')
@@ -59,9 +49,9 @@ export default new Vuex.Store({
           });
     }
 
-
   },
   actions: {
+
     getTodoesFromApi({commit}) {
       let {data} = axios({
         method: 'get',
@@ -72,7 +62,6 @@ export default new Vuex.Store({
           //
       })
     },
-
 
     async saveTodoWork({commit, state}, name) {
       await axios({
@@ -90,7 +79,6 @@ export default new Vuex.Store({
       })
     },
 
-
     async deleteTodoWork({commit}, id) {
       await axios({
         method: 'delete',
@@ -98,25 +86,9 @@ export default new Vuex.Store({
       });
     },
 
-
     todoesFromApi({commit}, {data}) {
       commit('todoesFromApi', {data})
     },
-
-
-    register({commit}, {name, email, password, c_password}) {
-      axios.post('api/register',{
-          name,
-          email,
-          password,
-          c_password
-      }).then(function (response) {
-        commit('register', response)
-      }).catch(function (err) {
-        console.log(err)
-      })
-    },
-
 
     logout({commit}) {
       commit('logout')

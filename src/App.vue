@@ -26,7 +26,11 @@
         VNav,
         CVueScroll
     },
-    created() {
+    beforeCreate() {
+        //hide scroll bar of browser
+        document.documentElement.style.overflow = 'hidden';
+    },
+      created() {
       this.$store.dispatch('getTodoesFromApi');
 
     },
