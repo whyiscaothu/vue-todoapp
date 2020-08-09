@@ -11,12 +11,10 @@ import router from 'vue-router'
 // export function setData({ commit }, { data }) {
 //     commit(SET_DATA, { data });
 // }
-let start = 0;
-let end = 3;
-function countDownTimer(timeStart, timeEnd, commitFunction, loginMessage, loginStatus) {
+function countDownTimer(timeStart, commitFunction, loginMessage, loginStatus) {
     let intervalID = setInterval(() => {
-        timeStart++;
-        if (timeStart === timeEnd){
+        timeStart--;
+        if (timeStart > 0){
             commitFunction(LOGIN, {
                 loginMessage,
                 loginStatus
@@ -47,7 +45,7 @@ export function login({ dispatch, commit, state }, { email, password }) {
                 loginStatus: true
             });
             // code open modal when login success ò fail here.
-            countDownTimer(0, 3, commit, loginMessage, false)
+            countDownTimer(3, commit, loginMessage, false)
         }).catch(function (err) {
             //
         });
@@ -81,7 +79,7 @@ export function register({dispatch, commit}, {name, email, password, c_password}
             loginStatus: true
         });
         // code open modal when login success ò fail here.
-        countDownTimer(0, 3, commit, loginMessage, false)
+        countDownTimer(3, commit, loginMessage, false)
 
     }).catch(function (err) {
         //
