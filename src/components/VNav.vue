@@ -52,8 +52,8 @@
         </v-list>
         <template v-slot:append>
             <c-authentication-button @click.native="logout" title="logout" mdi-icon="mdi-logout" />
-            <c-authentication-button title="login" mdi-icon="mdi-login" />
         </template>
+
         <c-authenticate-dialog>
             <v-card-text v-if="loginStatus && loginMessage === null">
                 Please stand by
@@ -70,6 +70,7 @@
                 </div>
             </v-card-text>
         </c-authenticate-dialog>
+
     </v-navigation-drawer>
 </template>
 
