@@ -22,6 +22,12 @@
 
                         <v-list-item-group v-model="item" color="primary">
 
+                            <v-skeleton-loader
+                                    v-if="savingInputTodoWork"
+                                    elevation="1"
+                                    type="list-item"
+                            ></v-skeleton-loader>
+
                             <v-list-item
                                     v-for="(todoFromApi, i) in todoesFromApi"
                                     :key="i"

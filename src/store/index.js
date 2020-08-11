@@ -27,6 +27,7 @@ export default new Vuex.Store({
 
     getTodoesFromApi(state, todoesFromApi) {
       state.todoesFromApi = todoesFromApi.reverse()
+      state.savingInputTodoWork = false;
     },
 
     savingInputTodoWork(state) {
@@ -61,7 +62,7 @@ export default new Vuex.Store({
           status: 1
         },
       }).then(function (response) {
-        state.savingInputTodoWork = false;
+
         return response;
       }).catch(function (err) {
           //

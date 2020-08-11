@@ -9,7 +9,6 @@
             dark
     >
         <v-list
-                dense
                 nav
                 class="py-0"
         >
@@ -27,26 +26,28 @@
             <v-divider></v-divider>
 
             <v-list-item
-                    v-for="item in items"
+                    v-for="(item, index) in items"
                     :key="item.title"
-                    link
-                    class="px-0"
+                    :to="item.nameRoute"
+                    color="blue"
+                    @click="disableNavLinkInActive(index)"
+                    :disabled="disableNavLink === index"
+                    exact
             >
 
 
-                <router-link class="d-flex col-12 py-0 text-decoration-none" :to="item.nameRoute">
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
+<!--                <router-link class="d-flex col-12 py-0 text-decoration-none" :to="item.nameRoute">-->
+                <v-list-item-icon>
+                    <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon>
 
-                    <v-list-item-content>
-                        <v-list-item-title>
+                <v-list-item-content>
+                    <v-list-item-title>
 
-                                {{ item.title }}
+                            {{ item.title }}
 
-                        </v-list-item-title>
-                    </v-list-item-content>
-                </router-link>
+                    </v-list-item-title>
+                </v-list-item-content>
 
             </v-list-item>
         </v-list>
@@ -89,6 +90,7 @@
 
         data () {
             return {
+                disableNavLink: null,
                 drawer: true,
                 items: [
                     {
@@ -145,6 +147,12 @@
         },
 
         methods: {
+
+            disableNavLinkInActive(index) {
+                this.disableNavLink = index;
+            },
+
+
             logout () {
                 let loginMessage = null;
                 let loginStatus = true;
@@ -159,5 +167,7 @@
 </script>
 
 <style scoped>
-
+    .router-link-active {
+        color: red;
+    }
 </style>

@@ -1,7 +1,7 @@
 import {
     LOGIN,
 } from './mutation-types';
-import router from 'vue-router'
+import router from '@/router'
 
 // /**
 // *
