@@ -33,6 +33,7 @@
                         <v-list-item
                                 v-for="(todoFromApi, i) in todoesFromApi"
                                 :key="i"
+                                :disabled="listTodoWorkId.some((someId) => someId === todoFromApi.id)"
                         >
                             <v-hover
                                     v-slot:default="{ hover }"
@@ -61,17 +62,33 @@
                                                 color="primary"
                                                 v-bind="attrs"
                                                 v-on="on"
+                                                :disabled="listTodoWorkId.some((someId) => someId === todoFromApi.id)"
                                         ><v-icon>mdi-information</v-icon></v-btn>
                                     </template>
                                     <span>{{todoFromApi.created_at}}</span>
                                 </v-tooltip>
                             </div>
 
-                            <v-checkbox
-                                    ripple
-                                    success
-                                    on-icon="mdi-check"
-                            ></v-checkbox>
+                            <!--Check is complete-->
+                            <div class="text-center">
+                                <v-tooltip top right>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                :disabled="disableDeleteButton(todoFromApi.id)"
+                                                class="ma-2"
+                                                text
+                                                icon
+                                                @click.stop="onCompleteTodoWorkClicked(todoFromApi.id)"
+                                                color="success"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                        >
+                                            <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Done</span>
+                                </v-tooltip>
+                            </div>
 
                             <!--delete icon-->
                             <div class="text-center">
@@ -128,6 +145,10 @@
                 }else {
                     this.$refs.insertCursor.focus();
                 }
+            },
+
+            onCompleteTodoWorkClicked(completeTodoWorkId) {
+                this.$store.dispatch('updateStatusTodoWork', completeTodoWorkId)
             },
 
             async onDeleteButtonClicked(todoWorkId) {

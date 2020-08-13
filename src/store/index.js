@@ -69,6 +69,15 @@ export default new Vuex.Store({
       })
     },
 
+    updateStatusTodoWork({commit}, completeTodoWorkId) {
+      axios.put(`api/works/${completeTodoWorkId}`, {
+        status: 0
+      })
+          .then(function (response) {
+            console.log(response)
+          })
+    },
+
     async deleteTodoWork({commit}, todoWorkId) {
       await axios({
         method: 'delete',
