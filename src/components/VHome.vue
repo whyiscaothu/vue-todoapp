@@ -18,48 +18,80 @@
 
 
 
-                    <v-list flat>
 
-                        <v-list-item-group v-model="item" color="primary">
 
-                            <v-skeleton-loader
-                                    v-if="savingInputTodoWork"
-                                    elevation="1"
-                                    type="list-item"
-                            ></v-skeleton-loader>
+                    <v-list
+                            flat
+                            elevation="10"
+                    >
+                        <v-skeleton-loader
+                                v-if="savingInputTodoWork"
+                                elevation="1"
+                                type="list-item"
+                        ></v-skeleton-loader>
 
-                            <v-list-item
-                                    v-for="(todoFromApi, i) in todoesFromApi"
-                                    :key="i"
+                        <v-list-item
+                                v-for="(todoFromApi, i) in todoesFromApi"
+                                :key="i"
+                        >
+                            <v-hover
+                                    v-slot:default="{ hover }"
                             >
-                                <v-checkbox></v-checkbox>
+                                <v-card
+                                        :elevation="hover ? 2 : 0"
+                                        class="mx-auto"
+                                        min-width="80%"
+                                >
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="todoFromApi.name"></v-list-item-title>
+                                    </v-list-item-content>
+                                </v-card>
+                            </v-hover>
+<!--                            <v-list-item-content>-->
+<!--                                <v-list-item-title v-text="todoFromApi.name"></v-list-item-title>-->
+<!--                            </v-list-item-content>-->
 
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="todoFromApi.name"></v-list-item-title>
-                                </v-list-item-content>
+                            <!--infomation icon-->
+                            <div class="text-center">
+                                <v-tooltip top right>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                class="ma-2"
+                                                icon
+                                                color="primary"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                        ><v-icon>mdi-information</v-icon></v-btn>
+                                    </template>
+                                    <span>{{todoFromApi.created_at}}</span>
+                                </v-tooltip>
+                            </div>
 
-                                <div class="text-center">
+                            <v-checkbox
+                                    ripple
+                                    success
+                                    on-icon="mdi-check"
+                            ></v-checkbox>
 
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-btn
-                                                    class="ma-2"
-                                                    text
-                                                    icon
-                                                    @click="deleteTodoWork(todoFromApi.id)"
-                                                    color="primary"
-                                                    dark
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                            ><v-icon>mdi-delete</v-icon></v-btn>
-                                        </template>
-                                        <span>Delete</span>
-                                    </v-tooltip>
-
-                                </div>
-
-                            </v-list-item>
-                        </v-list-item-group>
+                            <!--delete icon-->
+                            <div class="text-center">
+                                <v-tooltip top right>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                :disabled="disableDeleteButton(todoFromApi.id)"
+                                                class="ma-2"
+                                                text
+                                                icon
+                                                @click.stop="onDeleteButtonClicked(todoFromApi.id)"
+                                                color="red"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                        ><v-icon>mdi-delete</v-icon></v-btn>
+                                    </template>
+                                    <span>Delete</span>
+                                </v-tooltip>
+                            </div>
+                        </v-list-item>
                     </v-list>
                 </v-card>
             </div>
@@ -78,13 +110,10 @@
         },
         data() {
             return {
+                listTodoWorkId: [],
+                listItemComponentId: [],
                 inputTodoWork: '',
                 item: 1,
-                items: [
-                    { text: 'Real-Time', icon: 'mdi-clock' },
-                    { text: 'Audience', icon: 'mdi-account' },
-                    { text: 'Conversions', icon: 'mdi-flag' },
-                ],
             }
         },
         methods: {
@@ -100,11 +129,20 @@
                     this.$refs.insertCursor.focus();
                 }
             },
-            async deleteTodoWork(id) {
-                await this.$store.dispatch('deleteTodoWork', id)
+
+            async onDeleteButtonClicked(todoWorkId) {
+                this.listTodoWorkId.push(todoWorkId)
+                await this.$store.dispatch('deleteTodoWork', todoWorkId)
                 await this.$store.dispatch('getTodoesFromApi');
             },
+
+            disableDeleteButton(todoWorkId) {
+                return this.listTodoWorkId.some((someId) => someId === todoWorkId)
+            },
+
         },
+
+
         computed: {
             ...mapGetters({
                 todoesFromApi: 'todoesFromApi',

@@ -69,10 +69,10 @@ export default new Vuex.Store({
       })
     },
 
-    async deleteTodoWork({commit}, id) {
+    async deleteTodoWork({commit}, todoWorkId) {
       await axios({
         method: 'delete',
-        url: `api/works/${id}`
+        url: `api/works/${todoWorkId}`
       });
     },
 
