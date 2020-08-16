@@ -3,37 +3,23 @@
         <v-row>
             <div class="col-lg-8 col-md-10 col-sm-12 col-12 mx-auto">
 
-                <v-text-field
-                        @keyup.enter="saveTodoWork"
-                        ref="insertCursor"
-                        v-model="inputTodoWork"
-                        label="What need to be done?"
-                        :loading="savingInputTodoWork"
-                        :disabled="savingInputTodoWork"
-                ></v-text-field>
-
-                <v-btn @click="saveTodoWork" class="ma-2 px-16" tile color="success" dark>Save</v-btn>
+                <slot name="input-field"></slot>
 
                 <v-card tile>
-
-
-
-
-
                     <v-list
                             flat
                             elevation="10"
                     >
                         <v-skeleton-loader
-                                v-if="savingInputTodoWork"
+                                v-show="savingInputTodoWork"
                                 elevation="1"
                                 type="list-item"
                         ></v-skeleton-loader>
 
                         <v-list-item
-                                v-for="(todoWithStatusUndone, i) in todoesWithStatusUndone"
+                                v-for="(todo, i) in todoList"
                                 :key="i"
-                                :disabled="listTodoWorkId.some((someId) => someId === todoWithStatusUndone.id)"
+                                :disabled="listTodoWorkId.some((someId) => someId === todo.id)"
                         >
                             <v-hover
                                     v-slot:default="{ hover }"
@@ -44,13 +30,10 @@
                                         min-width="80%"
                                 >
                                     <v-list-item-content>
-                                        <v-list-item-title v-text="todoWithStatusUndone.name"></v-list-item-title>
+                                        <v-list-item-title v-text="todo.name"></v-list-item-title>
                                     </v-list-item-content>
                                 </v-card>
                             </v-hover>
-<!--                            <v-list-item-content>-->
-<!--                                <v-list-item-title v-text="todoWithStatusUndone.name"></v-list-item-title>-->
-<!--                            </v-list-item-content>-->
 
                             <!--infomation icon-->
                             <div class="text-center">
@@ -62,10 +45,10 @@
                                                 color="primary"
                                                 v-bind="attrs"
                                                 v-on="on"
-                                                :disabled="listTodoWorkId.some((someId) => someId === todoWithStatusUndone.id)"
+                                                :disabled="listTodoWorkId.some((someId) => someId === todo.id)"
                                         ><v-icon>mdi-information</v-icon></v-btn>
                                     </template>
-                                    <span>{{todoWithStatusUndone.created_at}}</span>
+                                    <span>{{todo.created_at}}</span>
                                 </v-tooltip>
                             </div>
 
@@ -74,11 +57,11 @@
                                 <v-tooltip top right>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
-                                                :disabled="disableDeleteButton(todoWithStatusUndone.id)"
+                                                :disabled="disableDeleteButton(todo.id)"
                                                 class="ma-2"
                                                 text
                                                 icon
-                                                @click.stop="onCompleteTodoWorkClicked(todoWithStatusUndone.id)"
+                                                @click.stop="onCompleteTodoWorkClicked(todo.id)"
                                                 color="success"
                                                 v-bind="attrs"
                                                 v-on="on"
@@ -95,11 +78,11 @@
                                 <v-tooltip top right>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
-                                                :disabled="disableDeleteButton(todoWithStatusUndone.id)"
+                                                :disabled="disableDeleteButton(todo.id)"
                                                 class="ma-2"
                                                 text
                                                 icon
-                                                @click.stop="onDeleteButtonClicked(todoWithStatusUndone.id)"
+                                                @click.stop="onDeleteButtonClicked(todo.id)"
                                                 color="red"
                                                 v-bind="attrs"
                                                 v-on="on"
@@ -120,11 +103,22 @@
     import {mapGetters} from 'vuex';
     import CVueScroll from "./CVueScroll";
     export default {
+
+        name: 'CListBox',
+
+
         props: {
+            todoList: {
+                type: Array,
+            }
         },
+
+
         components: {
             CVueScroll
         },
+
+
         data() {
             return {
                 listTodoWorkId: [],
@@ -133,22 +127,13 @@
                 item: 1,
             }
         },
+
+
         methods: {
-            async saveTodoWork() {
-                if (this.inputTodoWork.length > 0) {
-                    this.$store.commit('savingInputTodoWork')
-                    await this.$store.dispatch('saveTodoWork', this.inputTodoWork);
-                    await this.$store.dispatch('getTodoesFromApi');
 
-                    //remove input text
-                    this.inputTodoWork = '';
-                }else {
-                    this.$refs.insertCursor.focus();
-                }
-            },
-
-            onCompleteTodoWorkClicked(completeTodoWorkId) {
-                this.$store.dispatch('updateStatusTodoWork', completeTodoWorkId)
+            async onCompleteTodoWorkClicked(completeTodoWorkId) {
+                await this.$store.dispatch('updateStatusTodoWork', completeTodoWorkId)
+                await this.$store.dispatch('getTodoesFromApi');
             },
 
             async onDeleteButtonClicked(todoWorkId) {
@@ -167,7 +152,6 @@
         computed: {
             ...mapGetters({
                 todoesFromApi: 'todoesFromApi',
-                todoesWithStatusUndone: 'todoesWithStatusUndone',
                 savingInputTodoWork: 'savingInputTodoWork'
             }),
         },

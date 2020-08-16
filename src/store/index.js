@@ -21,6 +21,8 @@ export default new Vuex.Store({
 
     todoesWithStatusUndone: state => (state.todoesFromApi !== null) ? (state.todoesFromApi.filter(todoFromApi => +todoFromApi.status === 1)) : null,
 
+    todoesWithStatusDone: state => (state.todoesFromApi !== null) ? (state.todoesFromApi.filter(todoFromApi => +todoFromApi.status === 0)) : null,
+
     savingInputTodoWork: state => state.savingInputTodoWork,
 
     innerBrowserHeight: state => state.innerBrowserHeight,
@@ -64,7 +66,6 @@ export default new Vuex.Store({
           status: 1
         },
       }).then(function (response) {
-
         return response;
       }).catch(function (err) {
           //

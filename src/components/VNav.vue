@@ -95,16 +95,16 @@
                 items: [
                     {
                         title: 'Home',
-                        icon: 'mdi-view-dashboard',
+                        icon: 'mdi-home',
                         nameRoute: {
                             name: 'Home'
                         }
                     },
                     {
-                        title: 'User',
-                        icon: 'mdi-view-dashboard',
+                        title: 'Complete Works',
+                        icon: 'mdi-check-all',
                         nameRoute: {
-                            name: 'User'
+                            name: 'completedWorks'
                         }
                     },
                     {
