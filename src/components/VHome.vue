@@ -31,9 +31,9 @@
                         ></v-skeleton-loader>
 
                         <v-list-item
-                                v-for="(todoFromApi, i) in todoesFromApi"
+                                v-for="(todoWithStatusUndone, i) in todoesWithStatusUndone"
                                 :key="i"
-                                :disabled="listTodoWorkId.some((someId) => someId === todoFromApi.id)"
+                                :disabled="listTodoWorkId.some((someId) => someId === todoWithStatusUndone.id)"
                         >
                             <v-hover
                                     v-slot:default="{ hover }"
@@ -44,12 +44,12 @@
                                         min-width="80%"
                                 >
                                     <v-list-item-content>
-                                        <v-list-item-title v-text="todoFromApi.name"></v-list-item-title>
+                                        <v-list-item-title v-text="todoWithStatusUndone.name"></v-list-item-title>
                                     </v-list-item-content>
                                 </v-card>
                             </v-hover>
 <!--                            <v-list-item-content>-->
-<!--                                <v-list-item-title v-text="todoFromApi.name"></v-list-item-title>-->
+<!--                                <v-list-item-title v-text="todoWithStatusUndone.name"></v-list-item-title>-->
 <!--                            </v-list-item-content>-->
 
                             <!--infomation icon-->
@@ -62,10 +62,10 @@
                                                 color="primary"
                                                 v-bind="attrs"
                                                 v-on="on"
-                                                :disabled="listTodoWorkId.some((someId) => someId === todoFromApi.id)"
+                                                :disabled="listTodoWorkId.some((someId) => someId === todoWithStatusUndone.id)"
                                         ><v-icon>mdi-information</v-icon></v-btn>
                                     </template>
-                                    <span>{{todoFromApi.created_at}}</span>
+                                    <span>{{todoWithStatusUndone.created_at}}</span>
                                 </v-tooltip>
                             </div>
 
@@ -74,11 +74,11 @@
                                 <v-tooltip top right>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
-                                                :disabled="disableDeleteButton(todoFromApi.id)"
+                                                :disabled="disableDeleteButton(todoWithStatusUndone.id)"
                                                 class="ma-2"
                                                 text
                                                 icon
-                                                @click.stop="onCompleteTodoWorkClicked(todoFromApi.id)"
+                                                @click.stop="onCompleteTodoWorkClicked(todoWithStatusUndone.id)"
                                                 color="success"
                                                 v-bind="attrs"
                                                 v-on="on"
@@ -95,11 +95,11 @@
                                 <v-tooltip top right>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
-                                                :disabled="disableDeleteButton(todoFromApi.id)"
+                                                :disabled="disableDeleteButton(todoWithStatusUndone.id)"
                                                 class="ma-2"
                                                 text
                                                 icon
-                                                @click.stop="onDeleteButtonClicked(todoFromApi.id)"
+                                                @click.stop="onDeleteButtonClicked(todoWithStatusUndone.id)"
                                                 color="red"
                                                 v-bind="attrs"
                                                 v-on="on"
@@ -167,6 +167,7 @@
         computed: {
             ...mapGetters({
                 todoesFromApi: 'todoesFromApi',
+                todoesWithStatusUndone: 'todoesWithStatusUndone',
                 savingInputTodoWork: 'savingInputTodoWork'
             }),
         },
