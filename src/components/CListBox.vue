@@ -19,7 +19,7 @@
                         <v-list-item
                                 v-for="(todo, i) in todoList"
                                 :key="i"
-                                :disabled="listTodoWorkId.some((someId) => someId === todo.id)"
+                                :disabled="onAnActionButtonClicked(todo.id)"
                         >
                             <v-hover
                                     v-slot:default="{ hover }"
@@ -46,7 +46,7 @@
                                                 color="info"
                                                 v-bind="attrs"
                                                 v-on="on"
-                                                :disabled="listTodoWorkId.some((someId) => someId === todo.id)"
+                                                :disabled="onAnActionButtonClicked(todo.id)"
                                         ><v-icon>mdi-information</v-icon></v-btn>
                                     </template>
                                     <span>{{todo.created_at}}</span>
@@ -57,7 +57,10 @@
                             <slot
                                     name="check-complete-btn"
                                     :disableDeleteButton="disableDeleteButton"
+                                    :disableCompeleteButton="disableCompeleteButton"
                                     :onCompleteTodoWorkClicked="onCompleteTodoWorkClicked"
+                                    :listCompleteTodoWorkId="listCompleteTodoWorkId"
+                                    :onAnActionButtonClicked="onAnActionButtonClicked"
                                     :todoId="todo.id"
                             ></slot>
 
@@ -66,7 +69,8 @@
                                 <v-tooltip top right>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
-                                                :disabled="disableDeleteButton(todo.id)"
+                                                :disabled="onAnActionButtonClicked(todo.id)"
+                                                :loading="disableDeleteButton(todo.id)"
                                                 class="ma-2"
                                                 text
                                                 icon
@@ -110,6 +114,7 @@
         data() {
             return {
                 listTodoWorkId: [],
+                listCompleteTodoWorkId: [],
                 listItemComponentId: [],
                 inputTodoWork: '',
                 item: 1,
@@ -120,6 +125,7 @@
         methods: {
 
             async onCompleteTodoWorkClicked(completeTodoWorkId) {
+                this.listCompleteTodoWorkId.push(completeTodoWorkId)
                 await this.$store.dispatch('updateStatusTodoWork', completeTodoWorkId)
                 await this.$store.dispatch('getTodoesFromApi');
             },
@@ -133,6 +139,14 @@
             disableDeleteButton(todoWorkId) {
                 return this.listTodoWorkId.some((someId) => someId === todoWorkId)
             },
+
+            disableCompeleteButton(todoWorkId) {
+                return this.listCompleteTodoWorkId.some((someId) => someId === todoWorkId)
+            },
+
+            onAnActionButtonClicked(todoWorkId) {
+                return this.disableDeleteButton(todoWorkId) || this.disableCompeleteButton(todoWorkId);
+            }
 
         },
 

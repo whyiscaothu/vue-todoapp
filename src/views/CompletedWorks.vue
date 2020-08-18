@@ -5,7 +5,7 @@
                     slot="check-icon"
                     color="success"
             >
-                mdi-check
+                mdi-check-outline
             </v-icon>
         </c-list-box>
     </div>

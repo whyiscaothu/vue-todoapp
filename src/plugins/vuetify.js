@@ -18,7 +18,7 @@ export default new Vuetify({
         warning: '#FFC107'
       },
     },
-    dark: true
+    dark: false
   },
   icons: {
     iconfont: 'mdi',

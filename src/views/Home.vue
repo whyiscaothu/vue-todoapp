@@ -21,13 +21,14 @@
 
 
       <template
-              v-slot:check-complete-btn="{disableDeleteButton, onCompleteTodoWorkClicked, todoId}"
+              v-slot:check-complete-btn="{disableDeleteButton, disableCompeleteButton, onCompleteTodoWorkClicked, listCompleteTodoWorkId, onAnActionButtonClicked, todoId}"
               class="text-center"
       >
         <v-tooltip top right>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                    :disabled="disableDeleteButton(todoId)"
+                    :disabled="onAnActionButtonClicked(todoId)"
+                    :loading="disableCompeleteButton(todoId)"
                     class="ma-2"
                     text
                     icon
@@ -36,7 +37,7 @@
                     v-bind="attrs"
                     v-on="on"
             >
-              <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+              <v-icon>mdi-checkbox-blank-outline</v-icon>
             </v-btn>
           </template>
           <span>Done</span>
