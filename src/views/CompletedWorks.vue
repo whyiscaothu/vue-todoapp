@@ -1,6 +1,13 @@
 <template>
     <div class="completed-works">
-        <c-list-box :todoList="todoesWithStatusDone"></c-list-box>
+        <c-list-box :todoList="todoesWithStatusDone">
+            <v-icon
+                    slot="check-icon"
+                    color="success"
+            >
+                mdi-check
+            </v-icon>
+        </c-list-box>
     </div>
 </template>
 

@@ -26,9 +26,10 @@
                             >
                                 <v-card
                                         :elevation="hover ? 2 : 0"
-                                        class="mx-auto"
+                                        class="mx-auto d-flex"
                                         min-width="80%"
                                 >
+                                    <slot name="check-icon"></slot>
                                     <v-list-item-content>
                                         <v-list-item-title v-text="todo.name"></v-list-item-title>
                                     </v-list-item-content>
@@ -42,7 +43,7 @@
                                         <v-btn
                                                 class="ma-2"
                                                 icon
-                                                color="primary"
+                                                color="info"
                                                 v-bind="attrs"
                                                 v-on="on"
                                                 :disabled="listTodoWorkId.some((someId) => someId === todo.id)"
@@ -53,25 +54,12 @@
                             </div>
 
                             <!--Check is complete-->
-                            <div class="text-center">
-                                <v-tooltip top right>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn
-                                                :disabled="disableDeleteButton(todo.id)"
-                                                class="ma-2"
-                                                text
-                                                icon
-                                                @click.stop="onCompleteTodoWorkClicked(todo.id)"
-                                                color="success"
-                                                v-bind="attrs"
-                                                v-on="on"
-                                        >
-                                            <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Done</span>
-                                </v-tooltip>
-                            </div>
+                            <slot
+                                    name="check-complete-btn"
+                                    :disableDeleteButton="disableDeleteButton"
+                                    :onCompleteTodoWorkClicked="onCompleteTodoWorkClicked"
+                                    :todoId="todo.id"
+                            ></slot>
 
                             <!--delete icon-->
                             <div class="text-center">
